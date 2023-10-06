@@ -1,0 +1,301 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+  :root {
+    --color-primary: 247 147 34;
+    --color-text: 33 33 33;
+    --color-light: 245 245 245;
+    --color-success: 0 200 81;
+    --color-info: 51 181 229;
+    --color-warn: 255 187 51;
+    --color-error: 254 78 78;
+    --color-surface: 23 23 23;
+    --color-accent: 235 255 66;
+  }
+
+  :root[class="dark"] {
+    --color-primary: 247 147 34;
+    --color-text: 33 33 33;
+    --color-light: 245 245 245;
+    --color-success: 0 200 81;
+    --color-info: 51 181 229;
+    --color-warn: 255 187 51;
+    --color-error: 254 78 78;
+    --color-surface: 23 23 23;
+    --color-accent: 235 255 66;
+  }
+}
+
+@font-face {
+  font-display: block;
+  font-family: 'Youth';
+  font-weight: 900;
+  src: url('./fonts/Youth-Black.woff') format('opentype');
+}
+
+@font-face {
+  font-display: block;
+  font-family: 'Youth';
+  font-weight: 900;
+  font-style: italic;
+  src: url('./fonts/Youth-BlackItalic.woff') format('opentype');
+}
+
+@font-face {
+  font-display: block;
+  font-family: 'Youth';
+  font-weight: 700;
+  src: url('./fonts/Youth-Bold.woff') format('opentype');
+}
+
+@font-face {
+  font-display: block;
+  font-family: 'Youth';
+  font-weight: 700;
+  font-style: italic;
+  src: url('./fonts/Youth-BoldItalic.woff') format('opentype');
+}
+
+@font-face {
+  font-display: block;
+  font-family: 'Youth';
+  font-weight: 400;
+  font-style: italic;
+  src: url('./fonts/Youth-Italic.woff') format('opentype');
+}
+
+@font-face {
+  font-display: block;
+  font-family: 'Youth';
+  font-weight: 300;
+  src: url('./fonts/Youth-Light.woff') format('opentype');
+}
+
+@font-face {
+  font-display: block;
+  font-family: 'Youth';
+  font-weight: 300;
+  font-style: italic;
+  src: url('./fonts/Youth-LightItalic.woff') format('opentype');
+}
+
+@font-face {
+  font-display: block;
+  font-family: 'Youth';
+  font-weight: 500;
+  src: url('./fonts/Youth-Medium.woff') format('opentype');
+}
+
+@font-face {
+  font-display: block;
+  font-family: 'Youth';
+  font-weight: 500;
+  font-style: italic;
+  src: url('./fonts/Youth-MediumItalic.woff') format('opentype');
+}
+
+@font-face {
+  font-display: block;
+  font-family: 'Youth';
+  font-weight: 400;
+  src: url('./fonts/Youth-Regular.woff') format('opentype');
+}
+
+@font-face {
+  font-display: block;
+  font-family: 'Youth';
+  font-weight: 100;
+  src: url('./fonts/Youth-Thin.woff') format('opentype');
+}
+
+@font-face {
+  font-display: block;
+  font-family: 'Youth';
+  font-weight: 100;
+  font-style: italic;
+  src: url('./fonts/Youth-ThinItalic.woff') format('opentype');
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+.hide-scrollbars {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.hide-scrollbars::-webkit-scrollbar {
+  /* WebKit */
+  width: 0;
+  height: 0;
+  background: transparent;
+  display: none;
+}
+
+.icon {
+  position: relative;
+}
+
+.icon::before {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  font-size: 0.9em;
+  display: block;
+}
+
+.icon.okay::before {
+  color: green;
+  content: "✔";
+}
+
+.icon.ignored::before {
+  /* content: '*️⃣'; */
+  color: darkgray;
+  opacity: 0.8;
+  content: "✔";
+}
+
+.icon.error::before {
+  content: "⛔";
+}
+
+.icon.warning::before {
+  content: "⚠️";
+}
+
+.globalError {
+  position: fixed;
+  background-color: #cf3939;
+  color: white;
+  bottom: 20px;
+  right: 20px;
+  opacity: 0.4;
+  padding: 20px;
+  z-index: 10000;
+  overflow: auto;
+  max-width: 30vw;
+  max-height: 30vh;
+}
+
+
+.popupContent {
+  text-align: center;
+}
+
+.popupContainer {
+  display: inline-block;
+}
+
+pre {
+  text-align: left;
+}
+
+.buttons {
+  position: fixed;
+  right: 3vh;
+  bottom: 3vh;
+}
+
+
+.buttons>div {
+  size: 1vh;
+  color: white;
+  background: green;
+  text-align: center;
+  margin: 1vh;
+  padding: 1.1vh;
+  cursor: pointer;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 0.5vh;
+}
+
+.buttons.error>div {
+  background: grey;
+  cursor: not-allowed;
+}
+
+
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  color: white;
+  font-family: monospace;
+  font-size: 12px;
+  padding: 10px;
+  height: 20vh;
+}
+
+.promptWrapper {
+  display: flex;
+}
+
+.line {
+  font-size: 12px;
+  line-height: 12px;
+  font-family: monospace;
+  background: transparent !important;
+  /* we want to make this transparent whatever happens in the app*/
+  padding: 0;
+  color: white;
+}
+
+.line.command {
+  font-weight: bold;
+}
+
+.line.error,
+.line.success {
+  padding-left: 20px;
+  position: relative;
+}
+
+.line.error {
+  color: #cf3939;
+  position: relative;
+}
+
+.line.error::before,
+.line.success::before {
+  display: block;
+  position: absolute;
+  top: 2px;
+  left: 0;
+}
+
+.line.error::before {
+  content: '❌ ';
+}
+
+.line.success::before {
+  content: '✅ ';
+}
+
+.prompt {
+  display: flex;
+  align-items: center;
+}
+
+input:focus{
+  outline: none;
+  box-shadow: none;
+}
+
+.resultLabel {
+  color: dimgrey;
+}
+
+.warn {
+  color: darkorange;
+}
+
+textarea {
+  resize: none;
+}
