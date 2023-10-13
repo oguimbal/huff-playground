@@ -1,47 +1,46 @@
-import { useCallback, useState } from 'react';
-import { useEventListener, useIsomorphicLayoutEffect } from 'usehooks-ts';
-
+import React from "react";
+import { useCallback, useState } from "react";
+import { useEventListener, useIsomorphicLayoutEffect } from "usehooks-ts";
 
 export type HexString = `0x${string}`;
 
 export interface Size {
-  width: number
-  height: number
+  width: number;
+  height: number;
 }
 
 export function useElementSize<T extends HTMLElement = HTMLDivElement>(): [
   (node: T | null) => void,
-  Size,
+  Size
 ] {
   // Mutable values like 'ref.current' aren't valid dependencies
   // because mutating them doesn't re-render the component.
   // Instead, we use a state as a ref to be reactive.
-  const [ref, setRef] = useState<T | null>(null)
+  const [ref, setRef] = useState<T | null>(null);
   const [size, setSize] = useState<Size>({
     width: 0,
     height: 0,
-  })
+  });
 
   // Prevent too many rendering using useCallback
   const handleSize = useCallback(() => {
     setSize({
       width: ref?.offsetWidth || 0,
       height: ref?.offsetHeight || 0,
-    })
+    });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref?.offsetHeight, ref?.offsetWidth])
+  }, [ref?.offsetHeight, ref?.offsetWidth]);
 
-  useEventListener('resize', handleSize)
+  useEventListener("resize", handleSize);
 
   useIsomorphicLayoutEffect(() => {
-    handleSize()
+    handleSize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref?.offsetHeight, ref?.offsetWidth])
+  }, [ref?.offsetHeight, ref?.offsetWidth]);
 
-  return [setRef, size]
+  return [setRef, size];
 }
-
 
 export function deepEqual<T>(obj1: T, obj2: T) {
   if (obj1 === obj2) {
@@ -59,7 +58,7 @@ export function deepEqual<T>(obj1: T, obj2: T) {
   }
   // Private
   function isObject(obj: any): obj is object {
-    if (typeof obj === 'object' && obj != null) {
+    if (typeof obj === "object" && obj != null) {
       return true;
     } else {
       return false;
@@ -67,17 +66,24 @@ export function deepEqual<T>(obj1: T, obj2: T) {
   }
 }
 
-
-
 export function by<TKey, TOrig, TTarget>(
   col: TOrig[],
   key: (val: TOrig) => TKey,
-  value: (val: TOrig) => TTarget,
+  value: (val: TOrig) => TTarget
 ): Map<TKey, TTarget>;
-export function by<TKey, T>(col: T[], key: (val: T) => TKey, overrideDuplicates?: boolean): Map<TKey, T>;
-export function by(col: any[], key: (val: any) => string, valOrKey?: boolean | ((val: any) => any)): Map<any, any> {
+export function by<TKey, T>(
+  col: T[],
+  key: (val: T) => TKey,
+  overrideDuplicates?: boolean
+): Map<TKey, T>;
+export function by(
+  col: any[],
+  key: (val: any) => string,
+  valOrKey?: boolean | ((val: any) => any)
+): Map<any, any> {
   const ret = new Map();
-  const val = typeof valOrKey === 'boolean' || !valOrKey ? (x: any) => x : valOrKey;
+  const val =
+    typeof valOrKey === "boolean" || !valOrKey ? (x: any) => x : valOrKey;
   const ovr = valOrKey === true;
   for (const v of col) {
     const k = key(v);
@@ -91,7 +97,7 @@ export function by(col: any[], key: (val: any) => string, valOrKey?: boolean | (
 
 export function toLookup<T, TKey>(
   array: readonly T[],
-  keySelector: (item: T, idx: number) => TKey,
+  keySelector: (item: T, idx: number) => TKey
 ): Map<TKey, T[]> {
   const map = new Map<TKey, T[]>();
   let i = 0;
@@ -114,9 +120,33 @@ export function nullish(val: any): val is nil {
 }
 
 export function notNil<T>(value: (T | nil)[]): Exclude<T, null>[] {
-  return value.filter(x => !nullish(x)) as any[];
+  return value.filter((x) => !nullish(x)) as any[];
 }
 
 export function isHexString(str: string): str is HexString {
   return /^0x[0-9a-fA-F]*$/.test(str);
 }
+
+export const useHash = () => {
+  const [hash, setHash] = React.useState(() => window.location.hash);
+
+  const hashChangeHandler = React.useCallback(() => {
+    setHash(window.location.hash);
+  }, []);
+
+  React.useEffect(() => {
+    window.addEventListener("hashchange", hashChangeHandler);
+    return () => {
+      window.removeEventListener("hashchange", hashChangeHandler);
+    };
+  }, []);
+
+  const updateHash = React.useCallback(
+    (newHash) => {
+      if (newHash !== hash) window.location.hash = newHash;
+    },
+    [hash]
+  );
+
+  return [hash, updateHash] as const;
+};
